@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROLEX | The Marco Masterpiece</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,900;1,6..96,400&family=Manrope:wght@200;300;400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            /* Warna Mewah */
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --gold-solid: #D4AF37;
+            --black: #080808;
+            --deep-green: #001f12;
+            --off-white: #e0e0e0;
+        }
+
+        /* --- RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--black);
+            color: var(--off-white);
+            font-family: 'Manrope', sans-serif; /* Body font bersih */
+            overflow-x: hidden;
+        }
+
+        /* Hapus Scrollbar bawaan */
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* --- TYPOGRAPHY MEWAH --- */
+        h1, h2, h3, h4 { 
+            font-family: 'Bodoni Moda', serif; /* Font Fashion Mewah */
+            font-weight: 600;
+        }
+
+        .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .italic { font-style: italic; font-weight: 400; }
+        
+        /* --- FIXED ELEMENTS --- */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 900;
+        }
+
+        /* TAG MARCO - UPDATED DESIGN */
+        .marco-tag {
+            position: fixed; bottom: 30px; left: 30px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gold-solid); z-index: 100;
+            padding: 10px 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 40px 5vw;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; mix-blend-mode: difference;
+        }
+        .logo { font-family: 'Bodoni Moda', serif; font-size: 2rem; font-weight: 900; letter-spacing: 2px; }
+
+        /* --- SECTION 1: HERO --- */
+        .hero {
+            height: 100vh; width: 100%; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 120%; 
+            object-fit: cover; opacity: 0.5;
+            filter: grayscale(80%) contrast(1.1);
+        }
+        .hero-content { z-index: 2; text-align: center; }
+        .hero-title { 
+            font-size: 8vw; line-height: 0.9; text-transform: uppercase; letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff, #666);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle {
+            font-size: 1.5vw; letter-spacing: 10px; margin-top: 2rem;
+            text-transform: uppercase; color: var(--gold-solid);
+        }
+
+        /* --- SECTION 2: INTRO TEXT --- */
+        .intro {
+            padding: 15vh 10vw; text-align: center;
+        }
+        .intro p {
+            font-family: 'Bodoni Moda'; font-size: 3.5vw; line-height: 1.3;
+            color: #444; transition: color 0.5s;
+        }
+        .intro p span.highlight { color: var(--off-white); }
+
+        /* --- SECTION 3: STICKY SHOWCASE (FIXED IMAGES) --- */
+        .sticky-wrapper {
+            position: relative; width: 100%;
+        }
+        .sticky-container {
+            display: flex;
+        }
+        /* Bagian Kiri (Teks) */
+        .text-col {
+            width: 40%; height: 100vh;
+            position: sticky; top: 0;
+            display: flex; flex-direction: column; justify-content: center;
+            padding-left: 5vw; z-index: 10;
+        }
+        .info-card {
+            position: absolute; opacity: 0; transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .info-card.active {
+            position: relative; opacity: 1; transform: translateY(0);
+        }
+        .info-card h2 { font-size: 4rem; margin-bottom: 1rem; }
+        .info-card p { font-size: 1.1rem; line-height: 1.7; color: #999; max-width: 400px; }
+
+        /* Bagian Kanan (Gambar) */
+        .img-col { width: 60%; }
+        .img-wrapper {
+            height: 100vh; width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            padding: 50px;
+        }
+        .watch-img-container {
+            width: 80%; height: 80%;
+            overflow: hidden; position: relative;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8);
+        }
+        .watch-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transform: scale(1.1); transition: transform 1s;
+        }
+
+        /* --- SECTION 4: HORIZONTAL SCROLL (MATERIAL) --- */
+        .hz-section {
+            width: 100%; height: 100vh; overflow: hidden;
+            display: flex; background: #e8e8e8; color: var(--black);
+        }
+        .hz-track {
+            display: flex; height: 100%;
+        }
+        .hz-slide {
+            width: 80vw; height: 100%; flex-shrink: 0;
+            display: flex; align-items: center; padding: 0 10vw;
+            border-right: 1px solid rgba(0,0,0,0.1); position: relative;
+        }
+        .hz-content h3 { font-size: 5rem; margin-bottom: 2rem; color: var(--deep-green); }
+        .hz-content p { font-size: 1.2rem; max-width: 600px; line-height: 1.6; }
+        .big-letter {
+            position: absolute; right: -5vw; bottom: -10vh;
+            font-size: 30vw; font-family: 'Bodoni Moda'; opacity: 0.05; pointer-events: none;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            height: 80vh; background: var(--deep-green);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative;
+        }
+        .footer-logo { font-size: 15vw; opacity: 0.2; color: var(--gold-solid); font-family: 'Bodoni Moda'; }
+
+        /* --- CURSOR --- */
+        .cursor-outer {
+            width: 40px; height: 40px; border: 1px solid var(--gold-solid);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s ease-out;
+        }
+        .cursor-inner {
+            width: 6px; height: 6px; background: var(--gold-solid);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+    <div class="cursor-outer"></div>
+    <div class="cursor-inner"></div>
+    
+    <div class="marco-tag">Designed by Marco</div>
+
+    <nav>
+        <div class="logo">ROLEX</div>
+        <div style="font-size: 0.8rem; letter-spacing: 2px;">GENEVA, SWISS</div>
+    </nav>
+
+    <section class="hero">
+        <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2580&auto=format&fit=crop" class="hero-bg" alt="Rolex Dark">
+        <div class="hero-content">
+            <h1 class="hero-title">Perpetual<br><span class="italic gold-text">Elegance</span></h1>
+            <p class="hero-subtitle">The Collection</p>
+        </div>
+    </section>
+
+    <section class="intro">
+        <p class="reveal-text">Sebuah mahakarya horologi.</p>
+        <p class="reveal-text">Bukan sekadar alat penunjuk waktu,</p>
+        <p class="reveal-text">melainkan simbol <span class="highlight italic">pencapaian tertinggi.</span></p>
+    </section>
+
+    <section class="sticky-wrapper">
+        <div class="sticky-container">
+            
+            <div class="text-col">
+                <div class="info-card active" id="text-1">
+                    <span style="color:var(--gold-solid); letter-spacing:3px; display:block; margin-bottom:10px;">01 — RACING</span>
+                    <h2 class="gold-text">Daytona</h2>
+                    <p>Legenda sirkuit balap. Dilengkapi bezel tachymetric untuk mengukur kecepatan rata-rata hingga 400 km/jam. Ikon motorsport abadi.</p>
+                </div>
+                <div class="info-card" id="text-2">
+                    <span style="color:var(--gold-solid); letter-spacing:3px; display:block; margin-bottom:10px;">02 — DIVING</span>
+                    <h2>Submariner</h2>
+                    <p>Referensi utama jam tangan penyelam. Tahan air hingga kedalaman 300 meter. Simbol ketangguhan di bawah tekanan ekstrem.</p>
+                </div>
+                <div class="info-card" id="text-3">
+                    <span style="color:var(--gold-solid); letter-spacing:3px; display:block; margin-bottom:10px;">03 — TRAVEL</span>
+                    <h2>GMT-Master II</h2>
+                    <p>Jam tangan kosmopolitan. Didesain untuk menampilkan waktu di dua zona waktu berbeda secara bersamaan. Pilihan para traveler dunia.</p>
+                </div>
+            </div>
+
+            <div class="img-col">
+                <div class="img-wrapper trigger-img" data-id="1">
+                    <div class="watch-img-container">
+                        <img src="https://images.unsplash.com/photo-1614164185128-bde99da72318?q=80&w=1974&auto=format&fit=crop" class="watch-img" alt="Daytona">
+                    </div>
+                </div>
+                <div class="img-wrapper trigger-img" data-id="2">
+                    <div class="watch-img-container">
+                        <img src="https://images.unsplash.com/photo-1594534475808-b18fc33b045e?q=80&w=2070&auto=format&fit=crop" class="watch-img" alt="Submariner">
+                    </div>
+                </div>
+                <div class="img-wrapper trigger-img" data-id="3">
+                    <div class="watch-img-container">
+                        <img src="https://images.unsplash.com/photo-1622434641406-a158105c9168?q=80&w=1980&auto=format&fit=crop" class="watch-img" alt="GMT Master">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="hz-section">
+        <div class="hz-track">
+            <div class="hz-slide">
+                <span class="big-letter">Au</span>
+                <div class="hz-content">
+                    <h3>18 ct Gold</h3>
+                    <p>Rolex memiliki pengecoran emas eksklusif. Kami menciptakan paduan emas 18 karat yang unik: Emas Kuning, Putih, dan Everose.</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1000&auto=format&fit=crop" style="width: 300px; margin-left:50px; border-radius:4px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            </div>
+            <div class="hz-slide">
+                <span class="big-letter">St</span>
+                <div class="hz-content">
+                    <h3>Oystersteel</h3>
+                    <p>Baja superalloy 904L yang dikembangkan khusus. Tahan korosi ekstrem dan memancarkan kilau luar biasa saat dipoles.</p>
+                </div>
+                 <img src="https://images.unsplash.com/photo-1533139502658-0198f920d36c?q=80&w=1000&auto=format&fit=crop" style="width: 300px; margin-left:50px; border-radius:4px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            </div>
+            <div class="hz-slide">
+                <span class="big-letter">Ce</span>
+                <div class="hz-content">
+                    <h3>Cerachrom</h3>
+                    <p>Komponen keramik berteknologi tinggi untuk bezel. Sangat keras, praktis anti gores, dan warnanya tidak pudar oleh sinar UV.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">ROLEX</div>
+        <p style="margin-top:20px; letter-spacing:2px; font-size:0.9rem; color:var(--gold-solid);">© 2025 ROLEX SA</p>
+    </footer>
+
+    <script>
+        // --- 1. SETUP LENIS (SMOOTH SCROLL) ---
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            smooth: true,
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- 2. HERO PARALLAX ---
+        gsap.to(".hero-bg", {
+            y: "30%",
+            ease: "none",
+            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+        });
+
+        // --- 3. TEXT REVEAL (INTRO) ---
+        const texts = document.querySelectorAll(".reveal-text");
+        texts.forEach(text => {
+            gsap.to(text, {
+                color: "#e0e0e0", // Highlight color
+                scrollTrigger: {
+                    trigger: text, start: "top 60%", end: "top 40%", scrub: true
+                }
+            });
+        });
+
+        // --- 4. STICKY IMAGE & TEXT SWAP (CORE FEATURE) ---
+        // Logic: Saat gambar masuk viewport, ganti teks di sebelah kiri
+        const images = document.querySelectorAll('.trigger-img');
+        const infos = document.querySelectorAll('.info-card');
+
+        images.forEach((img, i) => {
+            ScrollTrigger.create({
+                trigger: img,
+                start: "top center",
+                end: "bottom center",
+                onEnter: () => {
+                    infos.forEach(info => info.classList.remove('active'));
+                    infos[i].classList.add('active');
+                    // Efek Zoom pada gambar saat aktif
+                    gsap.to(img.querySelector('img'), { scale: 1.2, duration: 1.5 });
+                },
+                onEnterBack: () => {
+                    infos.forEach(info => info.classList.remove('active'));
+                    infos[i].classList.add('active');
+                    gsap.to(img.querySelector('img'), { scale: 1.2, duration: 1.5 });
+                },
+                onLeave: () => {
+                     gsap.to(img.querySelector('img'), { scale: 1, duration: 1 });
+                },
+                onLeaveBack: () => {
+                     gsap.to(img.querySelector('img'), { scale: 1, duration: 1 });
+                }
+            });
+        });
+
+        // --- 5. HORIZONTAL SCROLL ---
+        const track = document.querySelector(".hz-track");
+        const hzSection = document.querySelector(".hz-section");
+
+        gsap.to(track, {
+            x: () => -(track.scrollWidth - window.innerWidth),
+            ease: "none",
+            scrollTrigger: {
+                trigger: hzSection,
+                pin: true,
+                scrub: 1,
+                end: () => "+=" + track.scrollWidth
+            }
+        });
+
+        // --- 6. BACKGROUND COLOR CHANGE ---
+        // White theme for Horizontal section
+        ScrollTrigger.create({
+            trigger: ".hz-section",
+            start: "top 50%", end: "bottom 50%",
+            onEnter: () => gsap.to("body", { backgroundColor: "#e8e8e8", color: "#080808", duration: 0.5 }),
+            onLeaveBack: () => gsap.to("body", { backgroundColor: "#080808", color: "#e0e0e0", duration: 0.5 }),
+            onLeave: () => gsap.to("body", { backgroundColor: "#001f12", color: "#fff", duration: 0.5 }), // Green for footer
+            onEnterBack: () => gsap.to("body", { backgroundColor: "#e8e8e8", color: "#080808", duration: 0.5 })
+        });
+
+        // --- 7. CUSTOM CURSOR ---
+        const cursorOuter = document.querySelector('.cursor-outer');
+        const cursorInner = document.querySelector('.cursor-inner');
+
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursorInner, { x: e.clientX - 3, y: e.clientY - 3, duration: 0.1 });
+            gsap.to(cursorOuter, { x: e.clientX - 20, y: e.clientY - 20, duration: 0.4, ease: "power2.out" });
+        });
+
+    </script>
+</body>
+</html>
